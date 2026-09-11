@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyric Box</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="lyrics-stage" id="lyricsStage">
+        <div class="lyric-line prev" id="lyricPrev"></div>
+        <div class="lyric-line current" id="lyricCurrent"></div>
+        <div class="lyric-line next" id="lyricNext"></div>
+    </div>
+
+    <div class="music-box" id="musicBox">
+        <div class="box-header" id="boxHeader">
+            <h1 class="title">🎵 Lyric Box</h1>
+            <button id="expandToggle" class="expand-btn hidden">⤢</button>
+        </div>
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search-bar"
+            placeholder="🔍 Search for a song..."
+        >
+
+        <div id="songList" class="song-list"></div>
+
+        <div id="player" class="player hidden">
+            <div class="now-playing">
+                <div class="song-name" id="playerTitle">Song Name</div>
+                <div class="song-artist" id="playerArtist">Artist</div>
+            </div>
+
+            <input type="range" id="progressBar" class="progress-bar" value="0" min="0" max="100">
+
+            <div class="time-row">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+
+            <button id="playPauseBtn" class="play-btn">▶</button>
+
+            <audio id="audio"></audio>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

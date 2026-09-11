@@ -1,0 +1,236 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e1e3f, #2d1b4e);
+    color: white;
+    position: relative;
+}
+
+.lyrics-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 0 60px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    z-index: 1;
+}
+
+body.playing .lyrics-stage {
+    opacity: 1;
+}
+
+.lyric-line {
+    transition: all 0.35s ease;
+}
+
+.lyric-line.prev,
+.lyric-line.next {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.lyric-line.current {
+    font-size: 34px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #ff9dd2, #8e6ee0, #6ee0d8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 25px rgba(142, 110, 224, 0.4);
+}
+
+.music-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 380px;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transition: top 0.6s ease, left 0.6s ease, transform 0.6s ease, width 0.6s ease, padding 0.6s ease;
+    z-index: 5;
+}
+
+.music-box.dragging {
+    transition: none;
+}
+
+body.playing .music-box {
+    top: calc(100vh - 190px);
+    left: 24px;
+    transform: translate(0, 0);
+    width: 260px;
+    padding: 18px;
+}
+
+.box-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    cursor: grab;
+}
+
+.box-header:active {
+    cursor: grabbing;
+}
+
+.title {
+    font-size: 26px;
+    letter-spacing: 1px;
+    transition: font-size 0.4s ease;
+}
+
+body.playing .title {
+    font-size: 16px;
+}
+
+.expand-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.expand-btn.hidden {
+    display: none;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 15px;
+    transition: opacity 0.3s ease, max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+}
+
+.search-bar::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    transition: opacity 0.3s ease, max-height 0.3s ease, margin 0.3s ease;
+}
+
+body.playing .search-bar,
+body.playing .song-list {
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.song-item {
+    padding: 12px 15px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.song-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+.song-item.selected {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.player.hidden {
+    display: none;
+}
+
+.now-playing {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.song-name {
+    font-size: 18px;
+    font-weight: bold;
+    transition: font-size 0.3s ease;
+}
+
+body.playing .song-name {
+    font-size: 14px;
+}
+
+.song-artist {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.progress-bar {
+    width: 100%;
+    margin: 10px 0;
+    accent-color: #8e6ee0;
+}
+
+.time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 10px;
+}
+
+.play-btn {
+    display: block;
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: #8e6ee0;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.08);
+}
+
+body.playing .play-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+}
