@@ -1,8 +1,8 @@
 const songs = [
-    { id: 1, title: "Night Changes", artist: "One Direction", file: "songs/night-changes.mp3" },
-    { id: 2, title: "A Sky Full of Stars", artist: "Coldplay", file: "songs/sky-full-of-stars.mp3" },
-    { id: 3, title: "Sunflower", artist: "Post Malone", file: "songs/sunflower.mp3" },
-    { id: 4, title: "Blinding Lights", artist: "The Weeknd", file: "songs/blinding-lights.mp3" },
+    { id: 1, title: "Night Changes", artist: "One Direction", file: "songs/night-changes.mp3", theme: "dreamy" },
+    { id: 2, title: "A Sky Full of Stars", artist: "Coldplay", file: "songs/sky-full-of-stars.mp3", theme: "chill" },
+    { id: 3, title: "Sunflower", artist: "Post Malone", file: "songs/sunflower.mp3", theme: "energetic" },
+    { id: 4, title: "Blinding Lights", artist: "The Weeknd", file: "songs/blinding-lights.mp3", theme: "dark" },
 ];
 
 const songListEl = document.getElementById("songList");
@@ -21,6 +21,7 @@ const lyricNextEl = document.getElementById("lyricNext");
 const expandToggleBtn = document.getElementById("expandToggle");
 const musicBox = document.getElementById("musicBox");
 const boxHeader = document.getElementById("boxHeader");
+const particlesEl = document.getElementById("particles");
 
 let currentSong = null;
 let currentLyrics = [];
@@ -41,7 +42,6 @@ function renderSongs(songArray) {
     });
 }
 
-// Parses LRC-format text like "[00:12.34]Some lyric line" into {time, text} objects
 function parseLRC(lrcText) {
     const lines = lrcText.split("\n");
     const result = [];
@@ -72,7 +72,6 @@ async function fetchLyrics(song) {
         if (data.syncedLyrics) {
             return parseLRC(data.syncedLyrics);
         } else if (data.plainLyrics) {
-            // No timestamps available, just show it as one block
             return [{ time: 0, text: data.plainLyrics.split("\n")[0] }];
         }
         return [];
@@ -96,6 +95,11 @@ async function loadSong(song) {
     lyricNextEl.textContent = "";
     document.body.classList.add("playing");
     expandToggleBtn.classList.remove("hidden");
+
+    document.body.classList.remove("theme-chill", "theme-romantic", "theme-dark", "theme-energetic", "theme-dreamy");
+    if (song.theme) {
+        document.body.classList.add(`theme-${song.theme}`);
+    }
 
     currentLyrics = await fetchLyrics(song);
     if (currentLyrics.length === 0) {
@@ -161,29 +165,68 @@ searchInputEl.addEventListener("input", () => {
     renderSongs(filtered);
 });
 
+// ---- DRAGGABLE BOX (mouse + touch) ----
 let isDragging = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 
-boxHeader.addEventListener("mousedown", (e) => {
-    if (e.target === expandToggleBtn) return;
+function startDrag(clientX, clientY, target) {
+    if (target === expandToggleBtn) return;
     isDragging = true;
     const rect = musicBox.getBoundingClientRect();
-    dragOffsetX = e.clientX - rect.left;
-    dragOffsetY = e.clientY - rect.top;
+    dragOffsetX = clientX - rect.left;
+    dragOffsetY = clientY - rect.top;
     musicBox.classList.add("dragging");
     musicBox.style.transform = "none";
-});
+}
 
-document.addEventListener("mousemove", (e) => {
+function moveDrag(clientX, clientY) {
     if (!isDragging) return;
-    musicBox.style.left = (e.clientX - dragOffsetX) + "px";
-    musicBox.style.top = (e.clientY - dragOffsetY) + "px";
-});
+    musicBox.style.left = (clientX - dragOffsetX) + "px";
+    musicBox.style.top = (clientY - dragOffsetY) + "px";
+}
 
-document.addEventListener("mouseup", () => {
+function endDrag() {
     isDragging = false;
     musicBox.classList.remove("dragging");
-});
+}
 
+boxHeader.addEventListener("mousedown", (e) => {
+    startDrag(e.clientX, e.clientY, e.target);
+});
+document.addEventListener("mousemove", (e) => {
+    moveDrag(e.clientX, e.clientY);
+});
+document.addEventListener("mouseup", endDrag);
+
+boxHeader.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY, e.target);
+}, { passive: true });
+
+document.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    moveDrag(touch.clientX, touch.clientY);
+}, { passive: true });
+
+document.addEventListener("touchend", endDrag);
+
+// ---- FLOATING PARTICLES ----
+function createParticles(count = 25) {
+    particlesEl.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        const size = Math.random() * 6 + 3;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}vw`;
+        p.style.animationDuration = `${Math.random() * 10 + 8}s`;
+        p.style.animationDelay = `${Math.random() * 8}s`;
+        particlesEl.appendChild(p);
+    }
+}
+
+createParticles();
 renderSongs(songs);

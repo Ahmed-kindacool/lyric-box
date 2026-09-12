@@ -11,6 +11,44 @@ body {
     background: linear-gradient(135deg, #1e1e3f, #2d1b4e);
     color: white;
     position: relative;
+    transition: background 1s ease;
+}
+
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    bottom: -20px;
+    border-radius: 50%;
+    background: var(--accent-2, #8e6ee0);
+    opacity: 0.35;
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.35;
+    }
+    90% {
+        opacity: 0.35;
+    }
+    100% {
+        transform: translateY(-110vh) translateX(20px);
+        opacity: 0;
+    }
 }
 
 .lyrics-stage {
@@ -49,11 +87,12 @@ body.playing .lyrics-stage {
 .lyric-line.current {
     font-size: 34px;
     font-weight: bold;
-    background: linear-gradient(90deg, #ff9dd2, #8e6ee0, #6ee0d8);
+    background: linear-gradient(90deg, var(--accent-1, #ff9dd2), var(--accent-2, #8e6ee0), var(--accent-3, #6ee0d8));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 25px rgba(142, 110, 224, 0.4);
+    text-shadow: 0 0 25px var(--glow, rgba(142, 110, 224, 0.4));
+    transition: background 1s ease;
 }
 
 .music-box {
@@ -62,14 +101,15 @@ body.playing .lyrics-stage {
     left: 50%;
     width: 380px;
     transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    transition: top 0.6s ease, left 0.6s ease, transform 0.6s ease, width 0.6s ease, padding 0.6s ease;
+    transition: top 0.6s ease, left 0.6s ease, transform 0.6s ease, width 0.6s ease, padding 0.6s ease, box-shadow 1s ease;
     z-index: 5;
+    max-width: 90vw;
 }
 
 .music-box.dragging {
@@ -82,6 +122,7 @@ body.playing .music-box {
     transform: translate(0, 0);
     width: 260px;
     padding: 18px;
+    box-shadow: 0 0 40px var(--glow, rgba(142, 110, 224, 0.4));
 }
 
 .box-header {
@@ -200,7 +241,7 @@ body.playing .song-name {
 .progress-bar {
     width: 100%;
     margin: 10px 0;
-    accent-color: #8e6ee0;
+    accent-color: var(--accent-2, #8e6ee0);
 }
 
 .time-row {
@@ -218,11 +259,11 @@ body.playing .song-name {
     height: 50px;
     border-radius: 50%;
     border: none;
-    background: #8e6ee0;
+    background: var(--accent-2, #8e6ee0);
     color: white;
     font-size: 18px;
     cursor: pointer;
-    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, background 1s ease;
 }
 
 .play-btn:hover {
@@ -233,4 +274,72 @@ body.playing .play-btn {
     width: 38px;
     height: 38px;
     font-size: 14px;
+}
+
+/* ===== SONG MOOD THEMES ===== */
+body.theme-chill {
+    background: linear-gradient(135deg, #1b2a4a, #2d4b7a);
+    --accent-1: #a5d8ff;
+    --accent-2: #4d8fd6;
+    --accent-3: #7ee0e0;
+    --glow: rgba(77, 143, 214, 0.5);
+}
+
+body.theme-romantic {
+    background: linear-gradient(135deg, #3a1b2e, #6b2b4e);
+    --accent-1: #ffb3d1;
+    --accent-2: #e0568f;
+    --accent-3: #ff8fa3;
+    --glow: rgba(224, 86, 143, 0.5);
+}
+
+body.theme-dark {
+    background: linear-gradient(135deg, #0d0d0d, #2a0e0e);
+    --accent-1: #ff4d4d;
+    --accent-2: #b30000;
+    --accent-3: #ff8080;
+    --glow: rgba(179, 0, 0, 0.5);
+}
+
+body.theme-energetic {
+    background: linear-gradient(135deg, #4a2b0d, #7a4a12);
+    --accent-1: #ffd166;
+    --accent-2: #ff8c42;
+    --accent-3: #ffe6a3;
+    --glow: rgba(255, 140, 66, 0.5);
+}
+
+body.theme-dreamy {
+    background: linear-gradient(135deg, #2d1b4e, #4a2b7a);
+    --accent-1: #d9b3ff;
+    --accent-2: #8e6ee0;
+    --accent-3: #c9a3ff;
+    --glow: rgba(142, 110, 224, 0.5);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .music-box { width: 340px; }
+    .lyric-line.current { font-size: 28px; }
+    .lyric-line.prev, .lyric-line.next { font-size: 17px; }
+    .lyrics-stage { padding: 0 30px; }
+}
+
+@media (max-width: 480px) {
+    .music-box { width: 90vw; padding: 22px; }
+    body.playing .music-box { width: 200px; padding: 14px; left: 12px; top: calc(100vh - 160px); }
+    .title { font-size: 22px; }
+    body.playing .title { font-size: 13px; }
+    .lyric-line.current { font-size: 22px; }
+    .lyric-line.prev, .lyric-line.next { font-size: 14px; }
+    .lyrics-stage { padding: 0 20px; gap: 12px; }
+    .play-btn { width: 44px; height: 44px; font-size: 16px; }
+    body.playing .play-btn { width: 32px; height: 32px; font-size: 12px; }
+    .song-name { font-size: 15px; }
+    .search-bar { font-size: 14px; padding: 10px 12px; }
+}
+
+@media (max-height: 500px) {
+    .lyrics-stage { gap: 8px; }
+    .lyric-line.current { font-size: 20px; }
 }
