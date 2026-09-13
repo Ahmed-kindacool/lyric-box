@@ -4,23 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lyric Box</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="particles" id="particles"></div>
 
-    <div class="lyrics-stage" id="lyricsStage">
-        <div class="lyric-line prev" id="lyricPrev"></div>
-        <div class="lyric-line current" id="lyricCurrent"></div>
-        <div class="lyric-line next" id="lyricNext"></div>
+    <div class="suggestion-widget" id="suggestionWidget">
+        <button id="suggestionToggle" class="suggestion-toggle">💡</button>
+        <div id="suggestionPanel" class="suggestion-panel hidden">
+            <div class="suggestion-title">Suggest a song</div>
+            <input type="text" id="suggestionInput" class="suggestion-input" placeholder="Song — Artist">
+            <button id="suggestionSubmit" class="suggestion-submit">Submit</button>
+            <div id="suggestionMsg" class="suggestion-msg"></div>
+        </div>
     </div>
 
-    <div class="music-box" id="musicBox">
-        <div class="box-header" id="boxHeader">
-            <h1 class="title">🎵 Lyric Box</h1>
-            <button id="expandToggle" class="expand-btn hidden">⤢</button>
-        </div>
+    <header class="hero">
+        <h1 class="hero-title"> Lyric Box</h1>
+        <p class="hero-subtitle">Pick a song. Get a reaction.</p>
 
         <input
             type="text"
@@ -28,25 +32,29 @@
             class="search-bar"
             placeholder="🔍 Search for a song..."
         >
+    </header>
 
-        <div id="songList" class="song-list"></div>
+    <main class="song-grid" id="songList"></main>
 
-        <div id="player" class="player hidden">
-            <div class="now-playing">
-                <div class="song-name" id="playerTitle">Song Name</div>
-                <div class="song-artist" id="playerArtist">Artist</div>
+    <div id="popupOverlay" class="popup-overlay hidden">
+        <div class="retro-window" id="retroWindow">
+            <div class="retro-titlebar" id="retroTitlebar">
+                <span id="popupWindowTitle">Now Vibing</span>
+                <button id="popupClose" class="retro-close">✕</button>
             </div>
-
-            <input type="range" id="progressBar" class="progress-bar" value="0" min="0" max="100">
-
-            <div class="time-row">
-                <span id="currentTime">0:00</span>
-                <span id="duration">0:00</span>
+            <div class="retro-body">
+                <div class="retro-row">
+                    <div class="popup-sticker-wrap">
+                        <img id="popupStickerImg" class="popup-sticker-gif hidden" src="" alt="sticker">
+                    </div>
+                    <div class="popup-text">
+                        <div id="popupLine" class="popup-line">Loading line...</div>
+                        <div id="popupSongTitle" class="popup-song-title">Song Name</div>
+                        <div id="popupSongArtist" class="popup-song-artist">Artist</div>
+                    </div>
+                </div>
+                <button id="popupOk" class="retro-ok">OK</button>
             </div>
-
-            <button id="playPauseBtn" class="play-btn">▶</button>
-
-            <audio id="audio"></audio>
         </div>
     </div>
 
