@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -23,7 +24,7 @@
     </div>
 
     <header class="hero">
-        <h1 class="hero-title"> Lyric Box</h1>
+        <h1 class="hero-title">Lyric Box</h1>
         <p class="hero-subtitle">Pick a song. Get a reaction.</p>
 
         <input
@@ -34,7 +35,9 @@
         >
     </header>
 
-    <main class="song-grid" id="songList"></main>
+    <main class="song-grid" id="songList">
+        <div class="no-results">Loading songs...</div>
+    </main>
 
     <div id="popupOverlay" class="popup-overlay hidden">
         <div class="retro-window" id="retroWindow">
@@ -48,11 +51,17 @@
                         <img id="popupStickerImg" class="popup-sticker-gif hidden" src="" alt="sticker">
                     </div>
                     <div class="popup-text">
-                        <div id="popupLine" class="popup-line">Loading line...</div>
                         <div id="popupSongTitle" class="popup-song-title">Song Name</div>
                         <div id="popupSongArtist" class="popup-song-artist">Artist</div>
                     </div>
                 </div>
+
+                <div class="section-label">Lyrics</div>
+                <div id="popupLyrics" class="popup-lyrics-box">Loading lyrics...</div>
+
+                <div class="section-label">About the artist</div>
+                <div id="popupArtistInfo" class="popup-artist-box">Loading info...</div>
+
                 <button id="popupOk" class="retro-ok">OK</button>
             </div>
         </div>
